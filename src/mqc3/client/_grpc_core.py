@@ -6,7 +6,7 @@ from typing import Any
 
 import grpc
 
-RETRYABLE_CODES = {grpc.StatusCode.UNAVAILABLE, grpc.StatusCode.DEADLINE_EXCEEDED}
+RETRYABLE_CODES = {grpc.StatusCode.UNAVAILABLE, grpc.StatusCode.DEADLINE_EXCEEDED, grpc.StatusCode.PERMISSION_DENIED}
 
 
 class GrpcConnectionManager(ABC):
