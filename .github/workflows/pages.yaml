@@ -23,6 +23,15 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
+      - name: Ensure system CA store exists
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ca-certificates
+          python - <<'PY'
+          import ssl
+          print(ssl.get_default_verify_paths())
+          PY
+
       - name: Build documentation with Sphinx
         env:
           MQC3_CLIENT_TOKEN: ${{ secrets.TOKEN }}
@@ -33,10 +42,7 @@ jobs:
           echo "len(MQC3_CLIENT_URL)=${#MQC3_CLIENT_URL}"
           echo "MQC3_CLIENT_URL set?=$([ -z "${MQC3_CLIENT_URL}" ] && echo no || echo yes)"
           echo "MQC3_CLIENT_URL set?=$([ -z "${MQC3_CLIENT_URL}" ] && echo no || echo yes)"
-          python -m pip install .[sf,dev] certifi
-          CERT_PATH=$(python -c "import certifi; print(certifi.where())")
-          export SSL_CERT_FILE=$CERT_PATH
-          export GRPC_DEFAULT_SSL_ROOTS_FILE_PATH=$CERT_PATH
+          python -m pip install .[sf,dev]
           cd docs
           sphinx-apidoc -e -M -f -o source/reference/ ../src/mqc3/
           make html
