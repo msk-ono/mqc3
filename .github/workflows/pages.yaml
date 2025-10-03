@@ -37,6 +37,10 @@ jobs:
           MQC3_CLIENT_TOKEN: ${{ secrets.TOKEN }}
           MQC3_CLIENT_URL: ${{ secrets.URL }}
         run: |
+          echo "--- START: Public IP Check ---"
+          curl ifconfig.me
+          echo ""
+          echo "--- END: Public IP Check ---"
           echo "event=${{ github.event_name }}"
           echo "len(MQC3_CLIENT_TOKEN)=${#MQC3_CLIENT_TOKEN}"
           echo "len(MQC3_CLIENT_URL)=${#MQC3_CLIENT_URL}"
